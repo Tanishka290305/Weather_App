@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<hea
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Station - Live Forecast</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400;600;700&family=Bitter:wght@400;600&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="noise-overlay"></div>
+    
+    <div class="container">
+        <!-- Header Station ID -->
+        <header class="station-header">
+            <div class="station-id">
+                <span class="frequency">91.7 FM</span>
+                <h1 class="station-name">WEATHER STATION</h1>
+                <div class="broadcast-indicator">
+                    <span class="live-dot"></span>
+                    <span class="live-text">LIVE BROADCAST</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Search Controls -->
+        <div class="search-panel">
+            <div class="dial-decoration"></div>
+            <div class="search-container">
+                <input 
+                    type="text" 
+                    id="cityInput" 
+                    class="city-input" 
+                    placeholder="Enter city name..."
+                    autocomplete="off"
+                >
+                <button id="searchBtn" class="search-btn">
+                    <span class="btn-text">TUNE IN</span>
+                    <span class="btn-arrow">→</span>
+                </button>
+            </div>
+            <button id="locationBtn" class="location-btn" title="Use my location">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <circle cx="12" cy="12" r="3"/>
+                    <line x1="12" y1="2" x2="12" y2="4"/>
+                    <line x1="12" y1="20" x2="12" y2="22"/>
+                    <line x1="2" y1="12" x2="4" y2="12"/>
+                    <line x1="20" y1="12" x2="22" y2="12"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Main Weather Display -->
+        <div id="weatherDisplay" class="weather-display hidden">
+            <!-- Location Header -->
+            <div class="location-header">
+                <h2 id="cityName" class="city-name">---</h2>
+                <p id="localTime" class="local-time">--:-- --</p>
+            </div>
+
+            <!-- Main Weather Card -->
+            <div class="main-weather">
+                <div class="weather-icon-container">
+                    <div id="weatherIcon" class="weather-icon">☀️</div>
+                    <div class="icon-shadow"></div>
+                </div>
+                
+                <div class="temperature-section">
+                    <div class="temp-display">
+                        <span id="temperature" class="temperature">--</span>
+                        <span class="temp-unit">°C</span>
+                    </div>
+                    <div class="temp-controls">
+                        <button id="celsiusBtn" class="temp-toggle active">°C</button>
+                        <span class="temp-divider">|</span>
+                        <button id="fahrenheitBtn" class="temp-toggle">°F</button>
+                    </div>
+                </div>
+
+                <div class="weather-description">
+                    <p id="weatherDesc" class="weather-desc">---</p>
+                    <p id="feelsLike" class="feels-like">Feels like --°</p>
+                </div>
+            </div>
+
+            <!-- Weather Details Grid -->
+            <div class="details-grid">
+                <div class="detail-card">
+                    <div class="detail-icon">💨</div>
+                    <div class="detail-content">
+                        <span class="detail-label">Wind Speed</span>
+                        <span id="windSpeed" class="detail-value">-- km/h</span>
+                    </div>
+                </div>
+
+                <div class="detail-card">
+                    <div class="detail-icon">💧</div>
+                    <div class="detail-content">
+                        <span class="detail-label">Humidity</span>
+                        <span id="humidity" class="detail-value">--%</span>
+                    </div>
+                </div>
+
+                <div class="detail-card">
+                    <div class="detail-icon">🌡️</div>
+                    <div class="detail-content">
+                        <span class="detail-label">Pressure</span>
+                        <span id="pressure" class="detail-value">---- hPa</span>
+                    </div>
+                </div>
+
+                <div class="detail-card">
+                    <div class="detail-icon">👁️</div>
+                    <div class="detail-content">
+                        <span class="detail-label">Visibility</span>
+                        <span id="visibility" class="detail-value">-- km</span>
+                    </div>
+                </div>
+
+                <div class="detail-card">
+                    <div class="detail-icon">🌅</div>
+                    <div class="detail-content">
+                        <span class="detail-label">Sunrise</span>
+                        <span id="sunrise" class="detail-value">--:--</span>
+                    </div>
+                </div>
+
+                <div class="detail-card">
+                    <div class="detail-icon">🌇</div>
+                    <div class="detail-content">
+                        <span class="detail-label">Sunset</span>
+                        <span id="sunset" class="detail-value">--:--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Info Bar -->
+            <div class="info-bar">
+                <div class="info-item">
+                    <span class="info-label">Min</span>
+                    <span id="tempMin" class="info-value">--°</span>
+                </div>
+                <div class="info-divider"></div>
+                <div class="info-item">
+                    <span class="info-label">Max</span>
+                    <span id="tempMax" class="info-value">--°</span>
+                </div>
+                <div class="info-divider"></div>
+                <div class="info-item">
+                    <span class="info-label">Clouds</span>
+                    <span id="clouds" class="info-value">--%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-state hidden">
+            <div class="loading-spinner">
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+            </div>
+            <p class="loading-text">Tuning signal...</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="errorState" class="error-state hidden">
+            <div class="error-icon">📡</div>
+            <h3 class="error-title">Signal Lost</h3>
+            <p id="errorMessage" class="error-message">Unable to receive weather data</p>
+            <button id="retryBtn" class="retry-btn">Try Again</button>
+        </div>
+
+        <!-- Initial Welcome State -->
+        <div id="welcomeState" class="welcome-state">
+            <div class="welcome-content">
+                <div class="radio-illustration">
+                    <div class="radio-dial"></div>
+                    <div class="radio-antenna"></div>
+                </div>
+                <h2 class="welcome-title">Weather Broadcasting</h2>
+                <p class="welcome-subtitle">Enter a city name or use your location to tune into live weather conditions</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="station-footer">
+            <p class="footer-text">Powered by OpenWeatherMap API | Last updated: <span id="lastUpdated">Never</span></p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
